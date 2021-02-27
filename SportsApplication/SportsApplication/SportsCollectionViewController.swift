@@ -17,11 +17,12 @@ class SportsCollectionViewController: UICollectionViewController{
     
 
     var sprtArray = [[String:AnyObject]]()
+    var leagueVC = LeagueTableViewController()
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        
+        leagueVC = self.storyboard?.instantiateViewController(withIdentifier: "LeaguesVC") as! LeagueTableViewController
         Alamofire.request("https://www.thesportsdb.com/api/v1/json/1/all_sports.php").validate().responseJSON {(responseData) -> Void in
             if((responseData.result.value) != nil) {
                 let swiftyJsonVar = JSON(responseData.result.value!)
@@ -83,7 +84,11 @@ class SportsCollectionViewController: UICollectionViewController{
         return cell
     }
     
-  
+    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        var dict = sprtArray[indexPath.row]
+        leagueVC.sportName = (dict["strSport"] as? String)!
+        self.navigationController?.pushViewController(leagueVC, animated: true)
+    }
 
  
     // MARK: UICollectionViewDelegate

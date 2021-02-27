@@ -6,13 +6,14 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Sports Collection View Controller-->
+        <!--Sports-->
         <scene sceneID="843-sC-fgB">
             <objects>
-                <collectionViewController id="d1q-2h-Rbz" customClass="SportsCollectionViewController" customModule="SportsApplication" customModuleProvider="target" sceneMemberID="viewController">
+                <collectionViewController storyboardIdentifier="SportsVC" id="d1q-2h-Rbz" customClass="SportsCollectionViewController" customModule="SportsApplication" customModuleProvider="target" sceneMemberID="viewController">
                     <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" id="979-Cw-xUK">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -56,11 +57,114 @@
                             <outlet property="delegate" destination="d1q-2h-Rbz" id="bPj-65-614"/>
                         </connections>
                     </collectionView>
-                    <tabBarItem key="tabBarItem" systemItem="mostViewed" id="tuf-RA-S28"/>
+                    <navigationItem key="navigationItem" title="Sports" id="a5E-l0-WeT"/>
                 </collectionViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Qyt-Vn-1ap" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-59.420289855072468" y="10.714285714285714"/>
+            <point key="canvasLocation" x="850.72463768115949" y="10.714285714285714"/>
+        </scene>
+        <!--League Table View Controller-->
+        <scene sceneID="X9g-ir-NNu">
+            <objects>
+                <tableViewController storyboardIdentifier="LeaguesVC" id="pbB-XA-Kyz" customClass="LeagueTableViewController" customModule="SportsApplication" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="3Ke-Kq-Cum">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <prototypes>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="Cell" rowHeight="125" id="k41-NA-5xa" customClass="LeagueTableViewCell" customModule="SportsApplication" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="28" width="414" height="125"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="k41-NA-5xa" id="4i7-Av-GR4">
+                                    <rect key="frame" x="0.0" y="0.0" width="376" height="124.5"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Ui5-tN-kHQ">
+                                            <rect key="frame" x="20" y="20" width="107" height="82"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        </imageView>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SKt-8p-GJK">
+                                            <rect key="frame" x="149" y="51" width="245" height="21"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GV9-0l-XBf">
+                                            <rect key="frame" x="324" y="65" width="70" height="71"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <state key="normal" title="Button" image="youtube"/>
+                                            <connections>
+                                                <action selector="playVideo:" destination="k41-NA-5xa" eventType="touchUpInside" id="2vw-72-14Z"/>
+                                            </connections>
+                                        </button>
+                                    </subviews>
+                                </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="leagueImage" destination="Ui5-tN-kHQ" id="e9u-Kq-KRc"/>
+                                    <outlet property="leagueName" destination="SKt-8p-GJK" id="PaS-Pe-PcJ"/>
+                                    <outlet property="playVideoBtn" destination="GV9-0l-XBf" id="Shh-Hf-LSk"/>
+                                    <segue destination="GTA-9m-3iG" kind="push" id="bl4-bX-i5z"/>
+                                </connections>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="pbB-XA-Kyz" id="saV-IK-Kjh"/>
+                            <outlet property="delegate" destination="pbB-XA-Kyz" id="wv2-vO-bPR"/>
+                        </connections>
+                    </tableView>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="GuV-5r-6bb" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1727.536231884058" y="2.6785714285714284"/>
+        </scene>
+        <!--Details League View Controller-->
+        <scene sceneID="Y6F-SD-2ZS">
+            <objects>
+                <viewController id="GTA-9m-3iG" customClass="DetailsLeagueViewController" customModule="SportsApplication" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="JaC-nD-s94">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <viewLayoutGuide key="safeArea" id="KoP-OA-PYS"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="aRM-B1-Vbk"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="sZK-YS-MPb" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2572" y="3"/>
+        </scene>
+        <!--Youtube Video View Controller-->
+        <scene sceneID="AbF-U9-1CW">
+            <objects>
+                <viewController storyboardIdentifier="youtubeVideoVC" id="Qkd-Fr-ght" customClass="YoutubeVideoViewController" customModule="SportsApplication" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="JkC-qY-sAx">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5CH-Zx-wug" customClass="YouTubePlayerView" customModule="YouTubePlayer">
+                                <rect key="frame" x="0.0" y="44" width="414" height="300"/>
+                                <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="300" id="Hxa-LB-KAQ"/>
+                                </constraints>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="Zl3-tk-skE" firstAttribute="trailing" secondItem="5CH-Zx-wug" secondAttribute="trailing" id="31Q-Xw-zsi"/>
+                            <constraint firstItem="5CH-Zx-wug" firstAttribute="leading" secondItem="Zl3-tk-skE" secondAttribute="leading" id="D9Y-g1-yeV"/>
+                            <constraint firstItem="5CH-Zx-wug" firstAttribute="top" secondItem="Zl3-tk-skE" secondAttribute="top" id="jLR-62-SsY"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="Zl3-tk-skE"/>
+                    </view>
+                    <connections>
+                        <outlet property="videoPlayer" destination="5CH-Zx-wug" id="6Oo-Wi-BGy"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="ZhA-c4-uEh" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1728" y="664"/>
         </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="ejh-S7-cMp">
@@ -73,12 +177,36 @@
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     </tabBar>
                     <connections>
-                        <segue destination="d1q-2h-Rbz" kind="relationship" relationship="viewControllers" id="WlW-Ed-HAG"/>
+                        <segue destination="HGo-f6-LIL" kind="relationship" relationship="viewControllers" id="WlW-Ed-HAG"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="LW1-Ub-ycc" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-969.56521739130437" y="10.714285714285714"/>
         </scene>
+        <!--Sports-->
+        <scene sceneID="LSs-G9-pSz">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="HGo-f6-LIL" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="Sports" image="sport-1" selectedImage="sport" id="tuf-RA-S28"/>
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="WH7-Ef-pCA">
+                        <rect key="frame" x="0.0" y="44" width="414" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="d1q-2h-Rbz" kind="relationship" relationship="rootViewController" id="M8c-nB-DJt"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="aus-kv-lcs" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-59.420289855072468" y="10.714285714285714"/>
+        </scene>
     </scenes>
+    <resources>
+        <image name="sport" width="24" height="24"/>
+        <image name="sport-1" width="32" height="32"/>
+        <image name="youtube" width="128" height="128"/>
+    </resources>
 </document>
