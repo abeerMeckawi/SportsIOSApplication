@@ -14,10 +14,8 @@ import SDWebImage
 class LeagueTableViewController: UITableViewController {
     
     var sportName : String = " "
-    var leagueId: [String] = []
-    var leaguedImageArr :[String] = []
-    var leaguedNameArr :[String] = []
-     var leaguedVideoArr :[String] = []
+    var leagueIdArray: [String] = []
+    var leagueArray: [League] = []
     var videoLeagueVC = YoutubeVideoViewController()
  
     
@@ -26,6 +24,7 @@ class LeagueTableViewController: UITableViewController {
         self.title="Leagues"
         videoLeagueVC = self.storyboard?.instantiateViewController(withIdentifier: "youtubeVideoVC") as! YoutubeVideoViewController
     }
+ 
     override func viewWillAppear(_ animated: Bool) {
          print(sportName)
         let url = "https://www.thesportsdb.com/api/v1/json/1/lookupleague.php?id="
@@ -40,12 +39,12 @@ class LeagueTableViewController: UITableViewController {
                     if (self.sportName == i["strSport"].stringValue){
                         //print("found the sport")
                         let id = i["idLeague"].stringValue
-                        self.leagueId.append(id)
+                        self.leagueIdArray.append(id)
                     }
                 }
            /// print(self.leagueId)
             
-            for i in self.leagueId{
+            for i in self.leagueIdArray{
                     //print(i)
             let id = i
                     
@@ -59,13 +58,11 @@ class LeagueTableViewController: UITableViewController {
                             //print("Alamofire")
                             let leagues = result!["leagues"]
                             for j in leagues.arrayValue{
-                                
-                                let leagueImage = j["strBadge"].stringValue
-                                let leagueName = j["strLeague"].stringValue
-                                let leaguevideo = j["strYoutube"].stringValue
-                               self.leaguedNameArr.append(leagueName)
-                               self.leaguedImageArr.append(leagueImage)
-                               self.leaguedVideoArr.append(leaguevideo)
+                                let league = League()
+                                league.leagueImg = j["strBadge"].stringValue
+                                league.leagueName = j["strLeague"].stringValue
+                                league.leaguevid = j["strYoutube"].stringValue
+                                self.leagueArray.append(league)
                             }
                             self.tableView.reloadData()
                             
@@ -79,7 +76,7 @@ class LeagueTableViewController: UITableViewController {
                 }
     }
   }
-        if self.leagueId.count > 0 {
+        if self.leagueArray.count > 0 {
           self.tableView.reloadData()
         }
    
@@ -93,21 +90,33 @@ class LeagueTableViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return leaguedNameArr.count
+        return leagueArray.count
     }
 
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! LeagueTableViewCell
 
-        cell.leagueName.text = leaguedNameArr[indexPath.row]
-        cell.leagueImage?.sd_setImage(with: URL(string: leaguedImageArr[indexPath.row] ), placeholderImage: UIImage(named: "placeholder.png"))
-        cell.configure(with: leaguedVideoArr[indexPath.row])
+        cell.leagueName.text = leagueArray[indexPath.row].leagueName
+        cell.leagueImage?.sd_setImage(with: URL(string:leagueArray[indexPath.row].leagueImg ), placeholderImage: UIImage(named: "placeholder.png"))
+        cell.configure(with: leagueArray[indexPath.row].leaguevid)
         cell.delegate = self
 
         return cell
     }
     
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "DetailsSegue" {
+        let detailsVC = segue.destination as? DetailsLeagueViewController
+            if let leagueIndex = tableView.indexPathForSelectedRow?.row
+            {
+               detailsVC?.leagueId = leagueIdArray[leagueIndex]
+               detailsVC?.leagueTitle = leagueArray[leagueIndex].leagueName
+               detailsVC?.leagueBadge = leagueArray[leagueIndex].leagueImg
+               detailsVC?.leagueVideo = leagueArray[leagueIndex].leaguevid
+            }
+        }
+    }
 
     /*
     // Override to support conditional editing of the table view.

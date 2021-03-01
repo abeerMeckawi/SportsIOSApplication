@@ -12,42 +12,40 @@ import SwiftyJSON
 import SDWebImage
 
 private let reuseIdentifier = "Cell"
+let kCellHeight : CGFloat = 100
+let kLineSpacing : CGFloat = 10
+let kInset : CGFloat = 10
 
 class SportsCollectionViewController: UICollectionViewController{
     
 
-    var sprtArray = [[String:AnyObject]]()
+   var sprtArray :[Sports] = []
     var leagueVC = LeagueTableViewController()
+   
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
         leagueVC = self.storyboard?.instantiateViewController(withIdentifier: "LeaguesVC") as! LeagueTableViewController
-        Alamofire.request("https://www.thesportsdb.com/api/v1/json/1/all_sports.php").validate().responseJSON {(responseData) -> Void in
+     Alamofire.request("https://www.thesportsdb.com/api/v1/json/1/all_sports.php").validate().responseJSON {(responseData) -> Void in
             if((responseData.result.value) != nil) {
                 let swiftyJsonVar = JSON(responseData.result.value!)
                 
-                if let resData = swiftyJsonVar["sports"].arrayObject {
-                    self.sprtArray = resData as! [[String:AnyObject]]
- 
+                let resData = swiftyJsonVar["sports"]
+                
+                for i in resData.arrayValue{
+                    let sport = Sports()
+                    sport.sportName = i["strSport"].stringValue
+                    sport.sportImage = i["strSportThumb"].stringValue
+                    self.sprtArray.append(sport)
                 }
+            
                 if self.sprtArray.count > 0 {
                     self.collectionView.reloadData()
                 }
             }
            
         }
-        
-     /*   request.responseJSON { (data) in
-            print(data)
-        }*/
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
-        // Register cell classes
-       // self.collectionView!.register(UICollectionViewCell.self, forCellWithReuseIdentifier: reuseIdentifier)
-
-        // Do any additional setup after loading the view.
     }
 
     /*
@@ -76,17 +74,16 @@ class SportsCollectionViewController: UICollectionViewController{
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as! SportsCollectionViewCell
         
-        var dict = sprtArray[indexPath.row]
-        cell.lblSports.text = dict["strSport"] as? String
-        cell.imageSports?.sd_setImage(with: URL(string: dict["strSportThumb"] as! String), placeholderImage: UIImage(named: "placeholder.png"))
+        cell.lblSports.text = sprtArray[indexPath.row].sportName
+        cell.imageSports?.sd_setImage(with: URL(string: sprtArray[indexPath.row].sportImage), placeholderImage: UIImage(named: "placeholder.png"))
 
     
         return cell
     }
     
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        var dict = sprtArray[indexPath.row]
-        leagueVC.sportName = (dict["strSport"] as? String)!
+        
+        leagueVC.sportName = (sprtArray[indexPath.row].sportName)
         self.navigationController?.pushViewController(leagueVC, animated: true)
     }
 
@@ -122,4 +119,22 @@ class SportsCollectionViewController: UICollectionViewController{
     }
     */
 
+}
+
+extension SportsCollectionViewController : UICollectionViewDelegateFlowLayout
+{
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize
+    {
+        return CGSize(width: (UIScreen.main.bounds.width - 2*kInset - kLineSpacing)/2, height: kCellHeight)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat
+    {
+        return kLineSpacing
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets
+    {
+        return UIEdgeInsets(top: kInset, left: kInset, bottom: kInset, right: kInset)
+    }
 }
