@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		040C751C7C7B875F598E0E10 /* Pods_SportsApplication.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 438C6E04F5952E59D548CCEB /* Pods_SportsApplication.framework */; };
+		1723FE1625EED4F700F0D379 /* Teams.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1723FE1525EED4F700F0D379 /* Teams.swift */; };
+		1723FE1925EEDF6700F0D379 /* TeamViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1723FE1825EEDF6700F0D379 /* TeamViewController.swift */; };
 		173B7A2825EAB3D6006977D6 /* YoutubeVideoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 173B7A2725EAB3D6006977D6 /* YoutubeVideoViewController.swift */; };
 		173B7A2A25EADC3F006977D6 /* DetailsLeagueViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 173B7A2925EADC3E006977D6 /* DetailsLeagueViewController.swift */; };
 		173B7A2C25EAF5B4006977D6 /* EventsCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 173B7A2B25EAF5B4006977D6 /* EventsCollectionViewCell.swift */; };
@@ -34,6 +36,8 @@
 
 /* Begin PBXFileReference section */
 		114923A6CFB2D1D361805706 /* Pods-SportsApplication.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SportsApplication.debug.xcconfig"; path = "Target Support Files/Pods-SportsApplication/Pods-SportsApplication.debug.xcconfig"; sourceTree = "<group>"; };
+		1723FE1525EED4F700F0D379 /* Teams.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Teams.swift; sourceTree = "<group>"; };
+		1723FE1825EEDF6700F0D379 /* TeamViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeamViewController.swift; sourceTree = "<group>"; };
 		173B7A2725EAB3D6006977D6 /* YoutubeVideoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YoutubeVideoViewController.swift; sourceTree = "<group>"; };
 		173B7A2925EADC3E006977D6 /* DetailsLeagueViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailsLeagueViewController.swift; sourceTree = "<group>"; };
 		173B7A2B25EAF5B4006977D6 /* EventsCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventsCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -74,12 +78,21 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		1723FE1725EEDF1500F0D379 /* Team */ = {
+			isa = PBXGroup;
+			children = (
+				1723FE1825EEDF6700F0D379 /* TeamViewController.swift */,
+			);
+			path = Team;
+			sourceTree = "<group>";
+		};
 		177D2EDB25ED627F0017D91D /* Model */ = {
 			isa = PBXGroup;
 			children = (
 				179F2D0325EC2C05004D07AF /* Sports.swift */,
 				179F2D0125EC0B37004D07AF /* Leagues.swift */,
 				179F2CFF25EC031D004D07AF /* Events.swift */,
+				1723FE1525EED4F700F0D379 /* Teams.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -158,6 +171,7 @@
 				177D2EDE25ED63140017D91D /* leagues */,
 				177D2EE025ED63D70017D91D /* DetailsLegue */,
 				177D2EDF25ED63BB0017D91D /* FavoriteLeague */,
+				1723FE1725EEDF1500F0D379 /* Team */,
 			);
 			path = SportsApplication;
 			sourceTree = "<group>";
@@ -307,9 +321,11 @@
 				179F2D0625EC4095004D07AF /* FavoriteLeagueTableViewCell.swift in Sources */,
 				177D2EEA25ED90FE0017D91D /* TeamCollectionReusableView.swift in Sources */,
 				179F2D0425EC2C05004D07AF /* Sports.swift in Sources */,
+				1723FE1925EEDF6700F0D379 /* TeamViewController.swift in Sources */,
 				17ADF82225DED7CA001CA012 /* LeagueTableViewCell.swift in Sources */,
 				17A8E2BC25DC461800C6F54B /* AppDelegate.swift in Sources */,
 				17ADF82425DED7F7001CA012 /* LeagueTableViewController.swift in Sources */,
+				1723FE1625EED4F700F0D379 /* Teams.swift in Sources */,
 				177D2EE825ED90E00017D91D /* LetestEventCollectionReusableView.swift in Sources */,
 				173B7A2A25EADC3F006977D6 /* DetailsLeagueViewController.swift in Sources */,
 				177D2EE625ED8DAD0017D91D /* UPEventsCollectionReusableView.swift in Sources */,

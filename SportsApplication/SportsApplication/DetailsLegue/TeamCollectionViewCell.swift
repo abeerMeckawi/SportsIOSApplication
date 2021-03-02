@@ -11,4 +11,6 @@ import UIKit
 class TeamCollectionViewCell: UICollectionViewCell {
     
     @IBOutlet weak var imgTeam: UIImageView!
+    
+    @IBOutlet weak var lblTeamName: UILabel!
 }

@@ -12,9 +12,9 @@ import SwiftyJSON
 import SDWebImage
 
 private let reuseIdentifier = "Cell"
-let kCellHeight : CGFloat = 100
-let kLineSpacing : CGFloat = 10
-let kInset : CGFloat = 10
+let kCellHeight : CGFloat = 150
+let kLineSpacing : CGFloat = 5
+let kInset : CGFloat = 5
 
 class SportsCollectionViewController: UICollectionViewController{
     
@@ -25,7 +25,7 @@ class SportsCollectionViewController: UICollectionViewController{
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        self.collectionView.backgroundColor = #colorLiteral(red: 0.4980392157, green: 1, blue: 0, alpha: 1)
         leagueVC = self.storyboard?.instantiateViewController(withIdentifier: "LeaguesVC") as! LeagueTableViewController
      Alamofire.request("https://www.thesportsdb.com/api/v1/json/1/all_sports.php").validate().responseJSON {(responseData) -> Void in
             if((responseData.result.value) != nil) {

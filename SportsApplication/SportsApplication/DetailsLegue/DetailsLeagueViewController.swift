@@ -18,6 +18,7 @@ class DetailsLeagueViewController: UIViewController, UICollectionViewDelegate, U
     @IBOutlet weak var letestCollection: UICollectionView!
     @IBOutlet weak var teamCollection: UICollectionView!
     
+    var teamVC = TeamViewController()
     let upComingIdentifier = "UpComingCell"
     let latestIdentifier = "LatestCell"
     let teamIdentifier = "TeamCell"
@@ -27,17 +28,14 @@ class DetailsLeagueViewController: UIViewController, UICollectionViewDelegate, U
     var leagueVideo : String = " "
     var eventIdArray: [String] = []
     var eventArray :[Event] = []
-    var teamBadgeArray:[String] = []
+    var teamArray:[Team] = []
     var favoriteLeague = [NSManagedObject]()
  
     override func viewDidLoad() {
         super.viewDidLoad()
         self.title="Details Leagues"
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "star"), style: .plain, target: self, action: #selector(favoriteTapped))
-        
-        upComingCollection.alwaysBounceHorizontal = true
-        teamCollection.alwaysBounceHorizontal = true
-      
+        teamVC = self.storyboard?.instantiateViewController(withIdentifier: "TeamVC") as! TeamViewController
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -101,12 +99,14 @@ class DetailsLeagueViewController: UIViewController, UICollectionViewDelegate, U
                         let resData = swiftyJsonVar["teams"]
                         
                         for i in resData.arrayValue{
-                            
-                            let id = i["strTeamBadge"].stringValue
-                            self.teamBadgeArray.append(id)
+                            let team = Team()
+                            team.teamId = i["idTeam"].stringValue
+                            team.teamBadge = i["strTeamBadge"].stringValue
+                            team.teamName = i["strTeam"].stringValue
+                            self.teamArray.append(team)
                         }
                     }
-                    print(self.teamBadgeArray)
+                  //  print(self.teamArray)
                     
                     /* if self.sprtArray.count > 0 {
                      self.collectionView.reloadData()
@@ -126,7 +126,7 @@ class DetailsLeagueViewController: UIViewController, UICollectionViewDelegate, U
             return eventArray.count;
             
         }else if(collectionView == teamCollection){
-            return teamBadgeArray.count;
+            return teamArray.count;
         }
         
        return eventArray.count
@@ -155,15 +155,20 @@ class DetailsLeagueViewController: UIViewController, UICollectionViewDelegate, U
       else if(collectionView == teamCollection){
         
        let teamCell = teamCollection.dequeueReusableCell(withReuseIdentifier: teamIdentifier, for: indexPath) as! TeamCollectionViewCell
-        
-         teamCell.imgTeam?.sd_setImage(with: URL(string: teamBadgeArray[indexPath.row]), placeholderImage: UIImage(named: "placeholder.png"))
+         teamCell.lblTeamName.text = teamArray[indexPath.row].teamName
+         teamCell.imgTeam?.sd_setImage(with: URL(string: teamArray[indexPath.row].teamBadge), placeholderImage: UIImage(named: "placeholder.png"))
         
             return teamCell
 
         }
         return upComingCell
     }
-
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        if(collectionView == teamCollection){
+        teamVC.teamId = teamArray[indexPath.row].teamId
+        self.navigationController?.pushViewController(teamVC, animated: true)
+        }
+    }
     
     @objc func favoriteTapped(){
         print("favorite")
