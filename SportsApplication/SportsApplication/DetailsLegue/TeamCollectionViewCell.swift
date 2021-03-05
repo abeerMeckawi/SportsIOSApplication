@@ -13,4 +13,10 @@ class TeamCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var imgTeam: UIImageView!
     
     @IBOutlet weak var lblTeamName: UILabel!
+    
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        imgTeam.layer.cornerRadius = imgTeam.frame.size.width/2
+        imgTeam.clipsToBounds = true
+    }
 }

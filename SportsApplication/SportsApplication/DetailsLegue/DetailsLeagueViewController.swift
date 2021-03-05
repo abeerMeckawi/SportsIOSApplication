@@ -59,10 +59,9 @@ class DetailsLeagueViewController: UIViewController, UICollectionViewDelegate, U
                     self.eventIdArray.append(id)
                     }
             //    }
-                print(self.eventIdArray)
+               // print(self.eventIdArray)
                 
                  for i in self.eventIdArray{
-                //print(i)
                  let id = i
                 Alamofire.request("https://www.thesportsdb.com/api/v1/json/1/lookupevent.php?id=\(id)").validate().responseJSON {response in
                     switch response.result{
@@ -84,7 +83,7 @@ class DetailsLeagueViewController: UIViewController, UICollectionViewDelegate, U
                        // print(self.eventArray)
                          self.upComingCollection.reloadData()
                          self.letestCollection.reloadData()
-                         self.teamCollection.reloadData()
+                      
                         break
                     case .failure:
                         print("error")
@@ -105,13 +104,9 @@ class DetailsLeagueViewController: UIViewController, UICollectionViewDelegate, U
                             team.teamName = i["strTeam"].stringValue
                             self.teamArray.append(team)
                         }
+                          self.teamCollection.reloadData()
                     }
                   //  print(self.teamArray)
-                    
-                    /* if self.sprtArray.count > 0 {
-                     self.collectionView.reloadData()
-                     
-                     }*/
                 }
         }
         }

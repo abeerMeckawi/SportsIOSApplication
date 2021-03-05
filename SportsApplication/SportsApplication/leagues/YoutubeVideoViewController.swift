@@ -23,8 +23,9 @@ class YoutubeVideoViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
             print(leagueVideo)
   
-    let myVideoURL = NSURL(string: leagueVideo)
-    videoPlayer.loadVideoURL(myVideoURL! as URL)
+/*    let myVideoURL = NSURL(string: leagueVideo)
+    videoPlayer.loadVideoURL(myVideoURL! as URL)*/
+    
     }
 
     /*

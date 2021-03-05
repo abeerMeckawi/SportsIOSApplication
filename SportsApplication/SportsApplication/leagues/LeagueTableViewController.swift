@@ -23,12 +23,15 @@ class LeagueTableViewController: UITableViewController {
         super.viewDidLoad()
         self.title="Leagues"
         videoLeagueVC = self.storyboard?.instantiateViewController(withIdentifier: "youtubeVideoVC") as! YoutubeVideoViewController
+        
+    
     }
  
     override func viewWillAppear(_ animated: Bool) {
          print(sportName)
         let url = "https://www.thesportsdb.com/api/v1/json/1/lookupleague.php?id="
-   Alamofire.request("https://www.thesportsdb.com/api/v1/json/1/all_leagues.php").validate().responseJSON {(responseData) -> Void in
+       // self.tableView.reloadData()
+     Alamofire.request("https://www.thesportsdb.com/api/v1/json/1/all_leagues.php").validate().responseJSON {(responseData) -> Void in
             if((responseData.result.value) != nil) {
                 let swiftyJsonVar = JSON(responseData.result.value!)
 
@@ -36,26 +39,19 @@ class LeagueTableViewController: UITableViewController {
                 
                 for i in resData.arrayValue{
                     // print(i)
-                    if (self.sportName == i["strSport"].stringValue){
-                        //print("found the sport")
+                    if i["strSport"].stringValue == self.sportName {
                         let id = i["idLeague"].stringValue
                         self.leagueIdArray.append(id)
                     }
                 }
-           /// print(self.leagueId)
+              // self.tableView.reloadData()
             
             for i in self.leagueIdArray{
-                    //print(i)
             let id = i
-                    
             Alamofire.request(url+id).validate().responseJSON {response in
-                        
                         switch response.result{
-                            
                         case .success:
-                            
                             let result = try? JSON(data: response.data!)
-                            //print("Alamofire")
                             let leagues = result!["leagues"]
                             for j in leagues.arrayValue{
                                 let league = League()
@@ -65,22 +61,20 @@ class LeagueTableViewController: UITableViewController {
                                 self.leagueArray.append(league)
                             }
                             self.tableView.reloadData()
-                            
                             break
                         case .failure:
                             print("error")
                             print(response.error as Any)
                             break
-                        }
-                    }
-                }
-    }
-  }
-        if self.leagueArray.count > 0 {
-          self.tableView.reloadData()
-        }
-   
+                        }}}
+    }}
+  
 }
+    override func viewDidDisappear(_ animated: Bool) {
+        leagueIdArray.removeAll()
+        leagueArray.removeAll()
+        self.tableView.reloadData()
+    }
     // MARK: - Table view data source
 
     override func numberOfSections(in tableView: UITableView) -> Int {
@@ -170,8 +164,12 @@ class LeagueTableViewController: UITableViewController {
 extension LeagueTableViewController : LeagueTableViewCellDelegate{
     
     func playVideo(with videoUrl: String) {
-        videoLeagueVC.leagueVideo = videoUrl
-        self.navigationController?.pushViewController(videoLeagueVC, animated: true)
+        print(videoUrl)
+        if let url = URL(string: "https://\(videoUrl)") {
+            UIApplication.shared.open(url)
+        }
+      /*  videoLeagueVC.leagueVideo = videoUrl
+        self.navigationController?.pushViewController(videoLeagueVC, animated: true)*/
     }
 }
 

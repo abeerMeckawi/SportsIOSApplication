@@ -14,6 +14,7 @@ class Sports{
     
     var sportName : String = " "
     var sportImage : String = " "
+    var sportId : String = " "
 
 }
 

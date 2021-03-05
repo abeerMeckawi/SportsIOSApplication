@@ -13,8 +13,8 @@ import SDWebImage
 
 private let reuseIdentifier = "Cell"
 let kCellHeight : CGFloat = 150
-let kLineSpacing : CGFloat = 5
-let kInset : CGFloat = 5
+let kLineSpacing : CGFloat = 0
+let kInset : CGFloat = 0
 
 class SportsCollectionViewController: UICollectionViewController{
     
@@ -25,9 +25,14 @@ class SportsCollectionViewController: UICollectionViewController{
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.collectionView.backgroundColor = #colorLiteral(red: 0.4980392157, green: 1, blue: 0, alpha: 1)
+        //self.collectionView.backgroundColor = #colorLiteral(red: 0.4980392157, green: 1, blue: 0, alpha: 1)
         leagueVC = self.storyboard?.instantiateViewController(withIdentifier: "LeaguesVC") as! LeagueTableViewController
-     Alamofire.request("https://www.thesportsdb.com/api/v1/json/1/all_sports.php").validate().responseJSON {(responseData) -> Void in
+
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+       
+        Alamofire.request("https://www.thesportsdb.com/api/v1/json/1/all_sports.php").validate().responseJSON {(responseData) -> Void in
             if((responseData.result.value) != nil) {
                 let swiftyJsonVar = JSON(responseData.result.value!)
                 
@@ -39,12 +44,9 @@ class SportsCollectionViewController: UICollectionViewController{
                     sport.sportImage = i["strSportThumb"].stringValue
                     self.sprtArray.append(sport)
                 }
-            
-                if self.sprtArray.count > 0 {
-                    self.collectionView.reloadData()
-                }
+                self.collectionView.reloadData()
+
             }
-           
         }
     }
 

@@ -33,7 +33,9 @@ class LeagueTableViewCell: UITableViewCell {
     }
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Initialization code
+   
+        leagueImage.layer.cornerRadius = leagueImage.frame.size.width/2
+        leagueImage.clipsToBounds = true
     }
 
     

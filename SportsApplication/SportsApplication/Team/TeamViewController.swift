@@ -26,25 +26,24 @@ class TeamViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.title = "Team Details"
-
+}
+    
+    override func viewWillAppear(_ animated: Bool) {
         Alamofire.request("https://www.thesportsdb.com/api/v1/json/1/lookupteam.php?id=\(teamId)").validate().responseJSON {(responseData) -> Void in
             if((responseData.result.value) != nil) {
                 let swiftyJsonVar = JSON(responseData.result.value!)
                 let resData = swiftyJsonVar["teams"]
                 
                 for i in resData.arrayValue{
-                  
-                  //  team.teamBadge = i["strTeamBadge"].stringValue
                     self.teamNameLal.text = i["strTeam"].stringValue
                     self.teamLeagueLbl.text = i["strLeague"].stringValue
                     self.teamStadiumName.text = i["strStadium"].stringValue
                     self.teamBadgeImg?.sd_setImage(with: URL(string: i["strTeamBadge"].stringValue), placeholderImage: UIImage(named: "placeholder.png"))
-                     self.teamStadiumImg?.sd_setImage(with: URL(string: i["strStadiumThumb"].stringValue), placeholderImage: UIImage(named: "placeholder.png"))
-                  //  self.teamArrayDetails.append(team)
+                    self.teamStadiumImg?.sd_setImage(with: URL(string: i["strStadiumThumb"].stringValue), placeholderImage: UIImage(named: "placeholder.png"))
                 }
             }
+        }
     }
-}
     
 
     /*

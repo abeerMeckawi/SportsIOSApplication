@@ -9,6 +9,7 @@
 import UIKit
 import CoreData
 import SDWebImage
+import Reachability
 
 class FavoriteLeagueTableViewController: UITableViewController {
 
@@ -30,6 +31,7 @@ class FavoriteLeagueTableViewController: UITableViewController {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "FavoriteLeague")
         do {
             favoriteLeague = try manageContext.fetch(fetchRequest) as! [NSManagedObject]
+            self.tableView.reloadData()
         }catch let error
         {
             print(error)
@@ -53,7 +55,7 @@ class FavoriteLeagueTableViewController: UITableViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! FavoriteLeagueTableViewCell
 
         cell.fName?.text = (favoriteLeague[indexPath.row].value(forKey: "name") as! String)
-        cell.fImage?.sd_setImage(with: URL(string: (favoriteLeague[indexPath.row].value(forKey: "badge") as! String)), placeholderImage: UIImage(named: "image.png"))
+        cell.fImage?.sd_setImage(with: URL(string: (favoriteLeague[indexPath.row].value(forKey: "badge") as! String)), placeholderImage: UIImage(named: "pleaceholder.png"))
         cell.configure(with: favoriteLeague[indexPath.row].value(forKey: "video") as! String)
         cell.fDelegate = self
 
@@ -64,9 +66,20 @@ class FavoriteLeagueTableViewController: UITableViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "favoriteLeagueSegue" {
             let favoriteVC = segue.destination as? DetailsLeagueViewController
-            if let leagueIndex = tableView.indexPathForSelectedRow?.row
-            {
-                favoriteVC?.leagueId = favoriteLeague[leagueIndex].value(forKey:"id") as! String
+            
+           NetworkManager.isReachable { networkManagerInstance in
+                print("Network is available")
+                if let leagueIndex = self.tableView.indexPathForSelectedRow?.row
+                {
+                    favoriteVC?.leagueId = self.favoriteLeague[leagueIndex].value(forKey:"id") as! String
+                }
+            }
+            NetworkManager.isUnreachable { networkManagerInstance in
+                print("Network is Unavailable")
+                
+                let alert = UIAlertController(title: "Message", message: "You Are Offline, Please connect to Internet", preferredStyle: UIAlertController.Style.alert)
+                alert.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.default, handler: nil))
+                self.present(alert, animated: true, completion: nil)
             }
         }
     }
