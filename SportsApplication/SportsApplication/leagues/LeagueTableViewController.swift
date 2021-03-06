@@ -10,6 +10,7 @@ import UIKit
 import Alamofire
 import SwiftyJSON
 import SDWebImage
+import CoreData
 
 class LeagueTableViewController: UITableViewController {
     
@@ -17,8 +18,9 @@ class LeagueTableViewController: UITableViewController {
     var leagueIdArray: [String] = []
     var leagueArray: [League] = []
     var videoLeagueVC = YoutubeVideoViewController()
+    var favoriteLeague = [NSManagedObject]()
+    var favorite = FavoriteLeagueTableViewController()
  
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.title="Leagues"
@@ -29,9 +31,7 @@ class LeagueTableViewController: UITableViewController {
  
     override func viewWillAppear(_ animated: Bool) {
          print(sportName)
-        let url = "https://www.thesportsdb.com/api/v1/json/1/lookupleague.php?id="
-       // self.tableView.reloadData()
-     Alamofire.request("https://www.thesportsdb.com/api/v1/json/1/all_leagues.php").validate().responseJSON {(responseData) -> Void in
+Alamofire.request("https://www.thesportsdb.com/api/v1/json/1/all_leagues.php").validate().responseJSON {(responseData) -> Void in
             if((responseData.result.value) != nil) {
                 let swiftyJsonVar = JSON(responseData.result.value!)
 
@@ -44,11 +44,9 @@ class LeagueTableViewController: UITableViewController {
                         self.leagueIdArray.append(id)
                     }
                 }
-              // self.tableView.reloadData()
-            
             for i in self.leagueIdArray{
             let id = i
-            Alamofire.request(url+id).validate().responseJSON {response in
+            Alamofire.request("https://www.thesportsdb.com/api/v1/json/1/lookupleague.php?id=\(id)").validate().responseJSON {response in
                         switch response.result{
                         case .success:
                             let result = try? JSON(data: response.data!)
@@ -67,8 +65,10 @@ class LeagueTableViewController: UITableViewController {
                             print(response.error as Any)
                             break
                         }}}
-    }}
-  
+            }else{
+                print("error")
+                print(responseData.error as Any)
+              }}
 }
     override func viewDidDisappear(_ animated: Bool) {
         leagueIdArray.removeAll()
@@ -90,6 +90,7 @@ class LeagueTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! LeagueTableViewCell
+        
 
         cell.leagueName.text = leagueArray[indexPath.row].leagueName
         cell.leagueImage?.sd_setImage(with: URL(string:leagueArray[indexPath.row].leagueImg ), placeholderImage: UIImage(named: "placeholder.png"))
@@ -108,6 +109,7 @@ class LeagueTableViewController: UITableViewController {
                detailsVC?.leagueTitle = leagueArray[leagueIndex].leagueName
                detailsVC?.leagueBadge = leagueArray[leagueIndex].leagueImg
                detailsVC?.leagueVideo = leagueArray[leagueIndex].leaguevid
+
             }
         }
     }

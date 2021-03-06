@@ -33,7 +33,8 @@ class FavoriteLeagueTableViewCell: UITableViewCell {
     }
     override func awakeFromNib() {
         super.awakeFromNib()
-        fImage.layer.cornerRadius = fImage.frame.size.width/2
+        
+        fImage.layer.cornerRadius = fImage.frame.size.width / 2
         fImage.clipsToBounds = true
     }
 
@@ -44,3 +45,6 @@ class FavoriteLeagueTableViewCell: UITableViewCell {
     }
 
 }
+
+
+

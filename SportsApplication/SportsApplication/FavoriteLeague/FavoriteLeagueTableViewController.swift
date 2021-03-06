@@ -14,7 +14,9 @@ import Reachability
 class FavoriteLeagueTableViewController: UITableViewController {
 
      var favoriteLeague = [NSManagedObject]()
+    var favoriteLeagueId :[String] = []
      var videoLeagueVC = YoutubeVideoViewController()
+     var data = CoreDataHandler.shared
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -31,11 +33,13 @@ class FavoriteLeagueTableViewController: UITableViewController {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "FavoriteLeague")
         do {
             favoriteLeague = try manageContext.fetch(fetchRequest) as! [NSManagedObject]
+         
             self.tableView.reloadData()
         }catch let error
         {
             print(error)
         }
+    
     }
 
     // MARK: - Table view data source
@@ -72,6 +76,7 @@ class FavoriteLeagueTableViewController: UITableViewController {
                 if let leagueIndex = self.tableView.indexPathForSelectedRow?.row
                 {
                     favoriteVC?.leagueId = self.favoriteLeague[leagueIndex].value(forKey:"id") as! String
+                    favoriteVC?.flag = 1
                 }
             }
             NetworkManager.isUnreachable { networkManagerInstance in

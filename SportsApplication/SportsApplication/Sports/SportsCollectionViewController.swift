@@ -25,6 +25,7 @@ class SportsCollectionViewController: UICollectionViewController{
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         //self.collectionView.backgroundColor = #colorLiteral(red: 0.4980392157, green: 1, blue: 0, alpha: 1)
         leagueVC = self.storyboard?.instantiateViewController(withIdentifier: "LeaguesVC") as! LeagueTableViewController
 
@@ -46,6 +47,9 @@ class SportsCollectionViewController: UICollectionViewController{
                 }
                 self.collectionView.reloadData()
 
+            }else{
+                print("error")
+                print(responseData.error as Any)
             }
         }
     }
@@ -75,7 +79,6 @@ class SportsCollectionViewController: UICollectionViewController{
 
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as! SportsCollectionViewCell
-        
         cell.lblSports.text = sprtArray[indexPath.row].sportName
         cell.imageSports?.sd_setImage(with: URL(string: sprtArray[indexPath.row].sportImage), placeholderImage: UIImage(named: "placeholder.png"))
 

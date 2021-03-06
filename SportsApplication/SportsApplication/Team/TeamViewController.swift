@@ -41,6 +41,9 @@ class TeamViewController: UIViewController {
                     self.teamBadgeImg?.sd_setImage(with: URL(string: i["strTeamBadge"].stringValue), placeholderImage: UIImage(named: "placeholder.png"))
                     self.teamStadiumImg?.sd_setImage(with: URL(string: i["strStadiumThumb"].stringValue), placeholderImage: UIImage(named: "placeholder.png"))
                 }
+            }else{
+                print("error")
+                print(responseData.error as Any)
             }
         }
     }

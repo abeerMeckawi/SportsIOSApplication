@@ -30,23 +30,32 @@ class DetailsLeagueViewController: UIViewController, UICollectionViewDelegate, U
     var eventArray :[Event] = []
     var teamArray:[Team] = []
     var favoriteLeague = [NSManagedObject]()
+    var data = CoreDataHandler.shared
+    var flag : Int = 0
  
     override func viewDidLoad() {
         super.viewDidLoad()
         self.title="Details Leagues"
-        navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "star"), style: .plain, target: self, action: #selector(favoriteTapped))
+        data.delegate = self
+        data.retriveData()
+        self.upComingCollection.backgroundColor = #colorLiteral(red: 0.2431372549, green: 0.4392156863, blue: 0.5960784314, alpha: 1)
+         self.letestCollection.backgroundColor = #colorLiteral(red: 0.2431372549, green: 0.4392156863, blue: 0.5960784314, alpha: 1)
+         self.teamCollection.backgroundColor = #colorLiteral(red: 0.2431372549, green: 0.4392156863, blue: 0.5960784314, alpha: 1)
+          self.view.backgroundColor = #colorLiteral(red: 0.2431372549, green: 0.4392156863, blue: 0.5960784314, alpha: 1)
+        
+
+        
+        if flag == 0{
+            navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "star-2"), style: .plain, target: self, action: #selector(favoriteTapped))
+            
+        }else if flag == 1{
+            navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "star"), style: .plain, target: self, action: nil)
+        }
         teamVC = self.storyboard?.instantiateViewController(withIdentifier: "TeamVC") as! TeamViewController
     }
     
     override func viewWillAppear(_ animated: Bool) {
         print(leagueId)
-
-        /*let date = Date()
-        let calendar = Calendar.current
-        let components = calendar.dateComponents([.year, .month, .day], from: date)
-        
-        let month = components.month
-        let day = components.day*/
         Alamofire.request("https://www.thesportsdb.com/api/v1/json/1/eventsseason.php?id=\(leagueId)&s=2020-2021").validate().responseJSON {(responseData) -> Void in
             if((responseData.result.value) != nil) {
                 let swiftyJsonVar = JSON(responseData.result.value!)
@@ -54,12 +63,10 @@ class DetailsLeagueViewController: UIViewController, UICollectionViewDelegate, U
                 let resData = swiftyJsonVar["events"]
                 
                 for i in resData.arrayValue{
-              // if ( "2021-\(month)-\(day)" <= i["dateEvent"].stringValue){
                     let id = i["idEvent"].stringValue
                     self.eventIdArray.append(id)
                     }
-            //    }
-               // print(self.eventIdArray)
+
                 
                  for i in self.eventIdArray{
                  let id = i
@@ -89,9 +96,7 @@ class DetailsLeagueViewController: UIViewController, UICollectionViewDelegate, U
                         print("error")
                         print(response.error as Any)
                         break
-                    }
-                }
-            }
+                    }}}
                 Alamofire.request("https://www.thesportsdb.com/api/v1/json/1/lookup_all_teams.php?id=\(self.leagueId)").validate().responseJSON {(responseData) -> Void in
                     if((responseData.result.value) != nil) {
                         let swiftyJsonVar = JSON(responseData.result.value!)
@@ -105,15 +110,27 @@ class DetailsLeagueViewController: UIViewController, UICollectionViewDelegate, U
                             self.teamArray.append(team)
                         }
                           self.teamCollection.reloadData()
+                    }else{
+                        print("error")
+                        print(responseData.error as Any)
                     }
                   //  print(self.teamArray)
-                }
+                }}else{
+                print("error")
+                print(responseData.error as Any)
+            }}
+        
         }
-        }
-   
-          // print(eventArray.count)
-         //  print(teamBadgeArray.count)
-        }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        eventIdArray.removeAll()
+        eventArray.removeAll()
+        teamArray.removeAll()
+        self.upComingCollection.reloadData()
+        self.letestCollection.reloadData()
+        self.teamCollection.reloadData()
+        
+    }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         
@@ -132,8 +149,6 @@ class DetailsLeagueViewController: UIViewController, UICollectionViewDelegate, U
             upComingCell.lblEvent.text = eventArray[indexPath.row].eventName
             upComingCell.lbllDate.text = eventArray[indexPath.row].eventDate
             upComingCell.lblTime.text = eventArray[indexPath.row].eventTime
-            //print(eventArray[indexPath.row].eventName)
-            //print("hello")
         
         if(collectionView == letestCollection){
             let latestCell = letestCollection.dequeueReusableCell(withReuseIdentifier: latestIdentifier, for: indexPath) as! LatestEventCollectionViewCell
@@ -145,6 +160,8 @@ class DetailsLeagueViewController: UIViewController, UICollectionViewDelegate, U
             latestCell.lblDate.text = eventArray[indexPath.row].eventDate
             latestCell.lblTime.text = eventArray[indexPath.row].eventTime
             
+            latestCell.layer.borderColor = #colorLiteral(red: 1, green: 0.7764705882, blue: 0, alpha: 1)
+            latestCell.layer.borderWidth = 2
             return latestCell
         }
       else if(collectionView == teamCollection){
@@ -152,12 +169,17 @@ class DetailsLeagueViewController: UIViewController, UICollectionViewDelegate, U
        let teamCell = teamCollection.dequeueReusableCell(withReuseIdentifier: teamIdentifier, for: indexPath) as! TeamCollectionViewCell
          teamCell.lblTeamName.text = teamArray[indexPath.row].teamName
          teamCell.imgTeam?.sd_setImage(with: URL(string: teamArray[indexPath.row].teamBadge), placeholderImage: UIImage(named: "placeholder.png"))
-        
+            teamCell.layer.borderColor = #colorLiteral(red: 1, green: 0.7764705882, blue: 0, alpha: 1)
+            teamCell.layer.borderWidth = 2
             return teamCell
 
         }
+         upComingCell.layer.borderColor = #colorLiteral(red: 1, green: 0.7764705882, blue: 0, alpha: 1)
+         upComingCell.layer.borderWidth = 2
         return upComingCell
     }
+    
+    
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if(collectionView == teamCollection){
         teamVC.teamId = teamArray[indexPath.row].teamId
@@ -167,21 +189,18 @@ class DetailsLeagueViewController: UIViewController, UICollectionViewDelegate, U
     
     @objc func favoriteTapped(){
         print("favorite")
+          navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "star"), style: .plain, target: self, action: nil)
+    
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
-        
         let manageContext = appDelegate.persistentContainer.viewContext
-        
         let entityLeague = NSEntityDescription.entity(forEntityName: "FavoriteLeague", in: manageContext)
-        
         let leagueData = NSManagedObject(entity: entityLeague!, insertInto: manageContext)
         
-      
         leagueData.setValue(leagueId, forKey: "id")
         leagueData.setValue(leagueTitle, forKey: "name")
         leagueData.setValue(leagueBadge, forKey: "badge")
         leagueData.setValue(leagueVideo, forKey: "video")
     
-        
         do{
             try manageContext.save()
             
@@ -189,8 +208,6 @@ class DetailsLeagueViewController: UIViewController, UICollectionViewDelegate, U
             print(error)
         }
         favoriteLeague.append(leagueData)
-       // self.tableView.reloadData()
-        
     }
     /*
     // MARK: - Navigation
@@ -202,4 +219,20 @@ class DetailsLeagueViewController: UIViewController, UICollectionViewDelegate, U
     }
     */
 
+}
+
+extension DetailsLeagueViewController : FavoriteLeaguesDelegate {
+    
+    func didRetriveFavoriteLeague(league: [NSManagedObject]) {
+        for i in league {
+            
+            if leagueId == i.value(forKey: "id") as! String {
+                
+                flag = 1
+              
+            }
+        }
+    }
+    
+    
 }
