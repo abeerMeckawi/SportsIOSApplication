@@ -37,7 +37,6 @@ class LeagueTableViewCell: UITableViewCell {
         leagueImage.layer.cornerRadius = leagueImage.frame.size.width/2
         leagueImage.clipsToBounds = true
         
-    
     }
 
     

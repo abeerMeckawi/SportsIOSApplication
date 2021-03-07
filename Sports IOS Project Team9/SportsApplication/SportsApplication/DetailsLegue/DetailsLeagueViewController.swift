@@ -12,6 +12,10 @@ import SwiftyJSON
 import CoreData
 import SDWebImage
 
+protocol FavoriteLeaguesDelegate {
+    func didRetriveFavoriteLeague(league : [NSManagedObject])
+}
+
 class DetailsLeagueViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource{
 
     @IBOutlet weak var upComingCollection: UICollectionView!
@@ -30,14 +34,23 @@ class DetailsLeagueViewController: UIViewController, UICollectionViewDelegate, U
     var eventArray :[Event] = []
     var teamArray:[Team] = []
     var favoriteLeague = [NSManagedObject]()
-    var data = CoreDataHandler.shared
+    var  delegate:FavoriteLeaguesDelegate?;
     var flag : Int = 0
  
     override func viewDidLoad() {
         super.viewDidLoad()
         self.title="Details Leagues"
-        data.delegate = self
-        data.retriveData()
+        delegate = self
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+        let manageContext = appDelegate.persistentContainer.viewContext;
+        let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: "FavoriteLeague");
+        do{
+            favoriteLeague = try manageContext.fetch(fetchRequest);
+            self.delegate?.didRetriveFavoriteLeague(league: favoriteLeague)
+        }catch let error{
+            print(error)
+        }
+
         self.upComingCollection.backgroundColor = #colorLiteral(red: 0.2431372549, green: 0.4392156863, blue: 0.5960784314, alpha: 1)
          self.letestCollection.backgroundColor = #colorLiteral(red: 0.2431372549, green: 0.4392156863, blue: 0.5960784314, alpha: 1)
          self.teamCollection.backgroundColor = #colorLiteral(red: 0.2431372549, green: 0.4392156863, blue: 0.5960784314, alpha: 1)
@@ -87,7 +100,6 @@ class DetailsLeagueViewController: UIViewController, UICollectionViewDelegate, U
                             event.SecondScore = j["intAwayScore"].stringValue
                             self.eventArray.append(event)
                         }
-                       // print(self.eventArray)
                          self.upComingCollection.reloadData()
                          self.letestCollection.reloadData()
                       
@@ -114,7 +126,6 @@ class DetailsLeagueViewController: UIViewController, UICollectionViewDelegate, U
                         print("error")
                         print(responseData.error as Any)
                     }
-                  //  print(self.teamArray)
                 }}else{
                 print("error")
                 print(responseData.error as Any)
@@ -209,16 +220,6 @@ class DetailsLeagueViewController: UIViewController, UICollectionViewDelegate, U
         }
         favoriteLeague.append(leagueData)
     }
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
 }
 
 extension DetailsLeagueViewController : FavoriteLeaguesDelegate {
@@ -233,6 +234,4 @@ extension DetailsLeagueViewController : FavoriteLeaguesDelegate {
             }
         }
     }
-    
-    
 }
